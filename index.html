@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>資歷累積類型檢查</title>
+<meta name="description" content="7 題、約 2 分鐘，看看你的資歷正在變成資產嗎？">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday, quiet and confident: a private conversation, not a sales page
+   IDEA the book cover: 資歷 as a grey hourglass, 資產 as a gold diamond
+   PICTURE line-drawn hourglass turning into a diamond; result shown as a marker on that same path
+   COLOUR near-black ground, warm ivory ink, brand gold, one muted grey for 資歷
+   TYPE Noto Serif TC for titles + Noto Sans TC for text
+   LAYOUT one calm column; picture above the title on phone, beside it from 760px */
+:root{color-scheme:dark;--bg:#0c0b09;--bg2:#15130f;--ink:#f3ede2;--soft:#b9b0a1;--mute:#8a8378;--gold:#c9a45c;--gold2:#e6c98a;--line:#2c2820;--grey:#7d7a74}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font:17px/1.75 "Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Noto Serif TC","Songti TC",serif;font-weight:700;line-height:1.3;margin:0;text-wrap:balance}
+h1{font-size:clamp(30px,6vw,46px);letter-spacing:.01em}
+h2{font-size:clamp(24px,4.6vw,32px)}
+h3{font-size:20px;color:var(--gold2)}
+p{margin:0 0 1em;text-wrap:pretty}
+.nw{white-space:nowrap}
+li,h2,h3{text-wrap:pretty}
+a{color:var(--gold2)}
+.wrap{max-width:760px;margin:0 auto;padding:clamp(28px,6vw,64px) max(5vw,20px)}
+.screen{display:none}
+.screen.on{display:block;animation:in .45s ease both}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.screen.on{animation:none}}
+.hero{display:grid;gap:28px;align-items:center}
+.hero{display:grid;gap:clamp(24px,4vw,56px);align-items:center;padding-top:clamp(8px,4vh,48px)}
+@media(min-width:760px){.hero{grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr)}.hero .cover{order:2}}
+.cover img{display:block;width:100%;max-width:300px;height:auto;margin:0 auto;filter:drop-shadow(0 18px 30px rgba(0,0,0,.55))}
+@media(max-width:759px){.cover img{max-width:170px}}
+.hero h1{font-size:clamp(28px,6vw,42px)}
+.lead{color:var(--soft);font-size:18px;margin-top:16px}
+.meta{color:var(--mute);font-size:15px;margin:22px 0 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 28px;border:1px solid var(--gold);background:var(--gold);color:#16120a;font:700 17px/1 "Noto Sans TC",sans-serif;border-radius:999px;cursor:pointer;text-decoration:none;transition:background .2s,color .2s}
+.btn:hover{background:var(--gold2);border-color:var(--gold2)}
+.btn:focus-visible,.opt:focus-visible,.ghost:focus-visible,input:focus-visible{outline:2px solid var(--gold2);outline-offset:3px}
+.btn.line{background:transparent;color:var(--gold2)}
+.btn.line:hover{background:var(--gold);color:#16120a}
+.ghost{background:none;border:0;color:var(--mute);font:15px "Noto Sans TC",sans-serif;cursor:pointer;padding:10px 0;min-height:44px}
+.ghost:hover{color:var(--ink)}
+.prog{height:3px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:10px}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--grey),var(--gold));transition:width .35s}
+.count{color:var(--mute);font-size:15px;display:flex;justify-content:space-between;align-items:center}
+.q{margin:26px 0 22px}
+.opts{display:grid;gap:12px}
+.opt{text-align:left;width:100%;min-height:60px;padding:16px 20px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;color:var(--ink);font:17px/1.6 "Noto Sans TC",sans-serif;cursor:pointer;transition:border-color .2s,background .2s}
+.opt:hover{border-color:var(--gold)}
+.opt.sel{border-color:var(--gold);background:#1d1a13}
+form{display:grid;gap:22px;margin-top:26px}
+label.f{display:grid;gap:8px;font-weight:500}
+input[type=text],input[type=email]{font:17px "Noto Sans TC",sans-serif;padding:14px 16px;background:var(--bg2);color:var(--ink);border:1px solid #3a352b;border-radius:12px;min-height:52px;width:100%}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:10px}
+legend{font-weight:500;margin-bottom:8px}
+.radio{display:flex;align-items:center;gap:12px;min-height:44px;cursor:pointer}
+.radio input{width:20px;height:20px;accent-color:var(--gold)}
+.err{color:#e59a7a;font-size:15px;min-height:1.5em;margin:-8px 0 0}
+.note{color:var(--mute);font-size:14px;line-height:1.7}
+.rtop{padding-bottom:8px}
+.rtag{color:var(--gold);font-weight:500;margin-bottom:8px}
+.gauge{margin:30px 0 8px}
+.track{position:relative;height:6px;border-radius:6px;background:linear-gradient(90deg,var(--grey),#a08a5c,var(--gold))}
+.dot{position:absolute;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:var(--gold2);box-shadow:0 0 0 5px #0c0b09,0 0 0 6px var(--gold);transition:left .8s ease}
+.zones{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:14px;font-size:14px;color:var(--mute)}
+.zones span:nth-child(2){text-align:center}.zones span:nth-child(3){text-align:right}
+.zones .me{color:var(--gold2);font-weight:700}
+.sec{border-top:1px solid var(--line);padding-top:30px;margin-top:34px}
+.sec h2{margin-bottom:16px}
+.list{list-style:none;padding:0;margin:0;display:grid;gap:18px}
+.list li b{display:block;color:var(--ink);font-size:18px;margin-bottom:2px}
+.list li span{color:var(--soft)}
+.bul{padding-left:1.2em;margin:0 0 1em;color:var(--soft)}
+.bul li{margin:4px 0}
+.quote{font-family:"Noto Serif TC",serif;font-size:21px;line-height:1.6;color:var(--gold2);margin:0 0 14px}
+.src{font-size:13px;color:var(--mute)}
+.ex{counter-reset:n;list-style:none;padding:0;margin:0 0 1em;display:grid;gap:14px}
+.ex li{counter-increment:n;display:grid;grid-template-columns:36px minmax(0,1fr);gap:10px}
+.ex li::before{content:counter(n);font-family:"Noto Serif TC",serif;font-size:22px;color:var(--gold);line-height:1.5}
+.offer{padding:26px 0;border-bottom:1px solid var(--line)}
+.offer:last-child{border-bottom:0}
+.pick{display:inline-block;color:#16120a;background:var(--gold);font-size:14px;font-weight:700;padding:3px 12px;border-radius:999px;margin-bottom:10px}
+.price{font-size:18px;margin:4px 0 10px}
+.price s{color:var(--mute);font-size:15px;margin-left:8px}
+.fit{color:var(--ink);font-weight:500;margin:10px 0 4px}
+.offer .btn{margin-top:10px}
+.letter{background:var(--bg2);border-radius:18px;padding:clamp(22px,4vw,34px);margin-top:38px}
+.sign{margin-top:18px;color:var(--soft)}
+.sign b{color:var(--ink);display:block;font-weight:500}
+.foot{color:var(--mute);font-size:13px;margin-top:34px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:center}
+.rhead{padding-bottom:6px}
+.rhead h1{margin-top:6px}
+.gends{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px}
+.gends svg{width:28px;height:28px}
+.dims{display:grid;gap:22px;margin-top:6px}
+.dim{display:grid;grid-template-columns:5.5em minmax(0,1fr);gap:6px 16px;align-items:center}
+.dim b{font-weight:500}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.seg i{height:10px;border-radius:5px;background:#24211b}
+.seg i.on1{background:var(--grey)}
+.seg i.on2{background:#a08a5c}
+.seg i.on3{background:var(--gold)}
+.dim p{grid-column:2;margin:0;color:var(--soft);font-size:15px;line-height:1.6}
+.seglbl{display:grid;grid-template-columns:5.5em minmax(0,1fr);gap:16px;font-size:13px;color:var(--mute)}
+.seglbl span{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.seglbl span em{font-style:normal;text-align:center}
+.hl{display:grid;gap:14px;margin-top:26px}
+@media(min-width:620px){.hl{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.hl div{background:var(--bg2);border-radius:14px;padding:18px 20px}
+.hl small{display:block;color:var(--mute);font-size:14px;margin-bottom:4px}
+.hl strong{font-family:"Noto Serif TC",serif;font-size:20px;color:var(--gold2);font-weight:700}
+.tools{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+@media(max-width:600px){body{font-size:16px}.lead{font-size:17px}.opt{font-size:16px}.dim{grid-template-columns:minmax(0,1fr)}.dim p{grid-column:1}.seglbl{grid-template-columns:minmax(0,1fr)}.seglbl>b{display:none}}
+@media print{
+:root{--bg:#fff;--bg2:#f6f3ec;--ink:#1a1712;--soft:#4a453c;--mute:#6b665d;--line:#ddd6c8;--gold:#9a7a34;--gold2:#8a6a24}
+body{background:#fff;color:#1a1712;font-size:12pt}
+.tools,.foot button,.offer .btn,#again{display:none!important}
+.screen{display:none!important}#report{display:block!important;animation:none}
+.sec,.offer,.letter,.dim{break-inside:avoid}
+.dot{box-shadow:0 0 0 4px #fff,0 0 0 5px #9a7a34}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<section id="intro" class="screen on">
+  <div class="hero">
+    <div class="cover"><img src="cover.webp" alt="《把資歷變資產》書封" width="560" height="821"></div>
+    <div>
+      <h1>你的資歷，<br><span style="white-space:nowrap">正在變成資產嗎？</span></h1>
+      <p class="lead">同樣的年資，累積的方式不同，十年後的價值就完全不同。用 7 個問題，看看你現在<span class="nw">站在哪裡。</span></p>
+      <button class="btn" id="start" type="button">開始回答</button>
+      <p class="meta">7 題，約 2 分鐘。沒有標準答案，請選最接近你「現在實際做法」的選項，而不是你覺得<span class="nw">「應該」怎麼做。</span></p>
+    </div>
+  </div>
+</section>
+
+<section id="quiz" class="screen" aria-live="polite">
+  <div class="prog"><i id="bar"></i></div>
+  <div class="count"><span id="num"></span><button class="ghost" id="back" type="button">← 上一題</button></div>
+  <h2 class="q" id="qtext"></h2>
+  <div class="opts" id="opts"></div>
+</section>
+
+<section id="lead" class="screen">
+  <h2 id="ltitle">你是<span style="color:var(--gold2)">偏資歷型人才</span></h2>
+  <p class="lead">留下稱呼和 Email，免費領取你<span class="nw">完整的結果報告。</span></p>
+  <form id="form" novalidate>
+    <label class="f" for="name">怎麼稱呼你？<input type="text" id="name" autocomplete="given-name" required></label>
+    <label class="f" for="email">Email<input type="email" id="email" autocomplete="email" inputmode="email" required></label>
+    <fieldset>
+      <legend>你目前的身分是？</legend>
+      <label class="radio"><input type="radio" name="role" value="一般工作者" checked>一般工作者</label>
+      <label class="radio"><input type="radio" name="role" value="主管">主管</label>
+      <label class="radio"><input type="radio" name="role" value="企業主或HR">企業主或 HR</label>
+    </fieldset>
+    <p class="err" id="err" role="alert"></p>
+    <button class="btn" type="submit">看我的報告</button>
+    <p class="note">送出後，你會收到「職涯資產健檢 AI 指令」，以及 Ginger 的電子報「幕僚觀察隨筆」，每月一篇，從經營層的視角看人才與職場。你的資料只用於寄送報告與相關內容，不會提供給第三方，可隨時取消訂閱。</p>
+  </form>
+</section>
+
+<section id="report" class="screen"></section>
+
+</main>
+<iframe name="kit_sink" title="訂閱" style="display:none"></iframe>
+<script>
+{
+/* ====== 上線前請填寫 ====== */
+const CONFIG = {
+  // Kit 表單數字 ID（表單嵌入 HTML 裡 app.kit.com/forms/數字/subscriptions 的那串數字）
+  // 三種結果各送到自己的表單，各自觸發不同的序列
+  kitForms: { 1: "10196566", 2: "10196568", 3: "10196571" },  // 1 偏資歷型｜2 轉型中｜3 偏資產型
+  checkupUrl: "",         // 職涯資產健檢 AI 指令
+  bookUrl: "",            // 《把資歷變資產》購書連結
+  talkUrl: "",            // 新書分享會報名
+  groupUrl: "",           // 資產升級共學群：免費入群對談預約
+  oneOnOneUrl: "",        // 一對一資產梳理對談（NT$1,200）預約
+  workshopUrl: "https://workshop.elites888.com/",
+  // 網站模式：inline（預覽用，題目與報告同頁）｜check（問卷站）｜report（報告站）
+  mode: "check",
+  checkUrl: "https://check.elites888.com/",
+  reportUrl: "https://report.elites888.com/",
+  lineUrl: "https://line.me/R/ti/p/@elites888"
+};
+const go = u => u || CONFIG.lineUrl;
+
+const QS = [
+  {q:"接到一個新任務時，你最先想的是？",o:["確認範圍和期限，照要求完成","這件事和我的專業有沒有關係，能不能學到東西","這件事要替公司解決什麼問題，我能多創造什麼"]},
+  {q:"回顧過去一年，你最在意的工作成果是？",o:["考績、加薪或獎金","學會新技能、累積新經驗","做出一套之後還能重複使用、或能教會別人的方法"]},
+  {q:"你通常怎麼決定要學什麼？",o:["工作需要什麼，就補什麼","看最近流行什麼，覺得有用就學","先想清楚自己的核心專長，再選能讓它更有價值的"]},
+  {q:"有人問「你的專長是什麼」，你通常怎麼回答？",o:["說出我的公司和職稱","列出我會的幾項技能","說出別人遇到什麼問題時，會第一個想到我"]},
+  {q:"公司宣布組織調整，你的第一個反應比較接近？",o:["擔心自己的位置會不會受影響","先觀察，等情況明朗再說","想想這次變動，我能多承擔或貢獻什麼"]},
+  {q:"和三年前的自己相比，你覺得？",o:["做的事差不多，只是更熟練了","多了一些新經驗，但說不太出來累積了什麼","能清楚說出自己多了哪些能力，別人也看得見"]},
+  {q:"專案出了狀況，你通常會？",o:["先釐清是哪個環節出錯、該由誰負責","趕快把問題處理好，接著做下一件事","處理完後回頭復盤，把原因和做法整理下來，下次用得上"]}
+];
+
+const IBM = `<div class="sec"><h2>為什麼現在值得開始</h2><p class="quote">一項學會的技能，<span class="nw">大約 5 年，</span><span class="nw">價值就剩一半；</span>過去，這個時間是 <span class="nw">10 到 15 年。</span></p><p class="src">資料來源：IBM 針對 37 國、5,000 多位高階主管的調查</p><p>技能會折舊，但被提煉過的經驗不會。愈早開始整理，你的經驗就有愈多時間累積成資產。</p></div>`;
+
+const offer = (o) => `<div class="offer">${o.pick?'<span class="pick">推薦你從這裡開始</span>':''}<h3>${o.t}</h3>${o.price?`<p class="price">${o.price}</p>`:''}<p>${o.d}</p><p class="fit">適合你，如果：</p><ul class="bul">${o.fit.map(f=>`<li>${f}</li>`).join('')}</ul><div style="display:flex;flex-wrap:wrap;gap:12px"><a class="btn ${o.pick?'':'line'}" href="${o.url}" target="_blank" rel="noopener">${o.cta}</a>${o.url2?`<a class="btn line" href="${o.url2}" target="_blank" rel="noopener">${o.cta2}</a>`:''}</div></div>`;
+
+const R = {
+ 1:{tag:"偏資歷型",title:"你很努力，只是累積還沒被看見",
+  means:`<p>在 7 個面向裡，你有比較多的答案落在「資歷型」這一邊。通常這代表：</p><ul class="bul"><li>你做事認真、可靠，是交辦事情時讓人放心的人</li><li>你的價值很大一部分，來自你熟悉的職位、流程和資源</li><li>你習慣把眼前的事做好，比較少停下來想「這些經驗，正在累積成什麼」</li></ul><p>這不是缺點。很多組織的穩定，正是靠這樣的人撐起來的。只是當環境開始變動，例如組織調整、新工具、新主管，你可能會比別人更早感到不安。不是因為你不夠好，而是你還說不清楚：自己真正值錢的是什麼。</p>`,
+  plus:[["豐富的實務經驗","你已經累積了大量經驗，只是還沒被整理過。這不是從零開始，而是還沒開始盤點。"],["可靠與責任感","在經營者眼中，「交給你就放心」本身就是一種信用，也是資產型人才最重要的底層之一。"],["對細節和流程的熟悉","你知道事情實際上怎麼運作。經過提煉之後，這些知識有機會變成別人學得會的方法。"]],
+  stuck:[["用年資證明自己","年資在增加，但「下一件重要的事交給你，你能創造多少價值」，你自己可能也說不太清楚。"],["價值依附在既有資源上","你的表現很好，但其中有多少來自職稱和資源，有多少來自你自己？這條界線可能還沒那麼清楚。"],["忙，但沒有時間整理","每天都在處理眼前的事，很少回頭看：哪些經驗正在變成你的資產，哪些只是讓你更忙。"]],
+  ibm:true,
+  qs:["三年後的你回頭看，你會感謝現在的你做哪一件事？","如果一年後，你的主管或重要客戶向別人介紹你，你會希望他用哪三句話？","寫下一件你做得很好、卻從來沒有人問過你「怎麼做到的」的事。如果現在有人問了，你會怎麼回答？"],opp:"你的可靠，和你對實際運作的熟悉，是最好的起點。只要開始整理，你會發現自己手上的籌碼，比想像中多。",
+  offers:[
+   {pick:1,t:"職涯資產健檢 AI 指令（免費）",d:"用 AI 花 15 分鐘，找出你最有價值、卻還沒被看見的經驗。",fit:["你想先自己試試看，還不想買書或花太多時間","你說不清楚自己的強項，想先有個起點"],url:go(CONFIG.checkupUrl),cta:"領取健檢指令"},
+   {t:"《把資歷變資產》：一本書，就是一套盤點工具",d:"書中每一章都附有實作練習。從第 3 章的「職涯資產負債表」開始，一步步替自己的經驗做一次完整盤點，搭配讀者專屬 AI 禮物包，邊讀邊做。",fit:["你習慣先把觀念想清楚，再開始行動","你想用自己的步調，有系統地完成盤點","你希望用低成本，拿到一套能反覆使用的工具"],url:go(CONFIG.bookUrl),cta:"了解這本書"},
+   {t:"一對一資產梳理對談（45 分鐘）",price:"NT$1,200<s>原價 NT$3,600</s>",d:"Ginger 會根據你的經歷，陪你找出已經在累積、卻還沒被看見的資產，並給你一套專屬於你的「資歷變資產」做法，讓你知道下一步該從哪裡開始。之後報名工作坊或陪跑，對談費用可全額折抵。",fit:["你試過自己整理，但總覺得看不清楚自己的強項","你希望針對自己的情況，得到具體、個人化的建議","你想省下自己摸索的時間，直接找到第一步"],url:go(CONFIG.oneOnOneUrl),cta:"預約一對一對談"}],
+  letter:"<p>在經營層身邊二十多年，我常遇到很認真的人，卻說不出自己會什麼，只知道自己一直在做。</p><p>其實，你不是沒有累積，只是還沒有人陪你把它整理出來。從報告裡的這三個問題開始就好。</p>"},
+ 2:{tag:"轉型中",title:"你已經看見方向，只差一套方法",
+  means:`<p>你的答案分布在資歷型和資產型之間。通常這代表：</p><ul class="bul"><li>你已經意識到，年資不等於價值</li><li>你開始主動學習、嘗試新東西，也願意投資自己</li><li>但你常覺得自己樣樣都會一點，卻說不清楚自己最值錢的是什麼</li></ul><p>這是最多人卡住、也最關鍵的階段。你缺的不是更多課程，而是把現有的經驗，配置到對的地方。</p>`,
+  plus:[["轉變的意願","你已經不滿足於「把事情做完」。這份意願，是最難教、也最重要的部分。"],["行動力","你會主動學習、嘗試，不只是想。這讓你比多數人更早開始累積。"],["開始用不同的角度看工作","你開始思考一件事背後的價值，而不只是完成它。這是經營者視角的起點。"]],
+  stuck:[["學很多，但沒有主軸","學過的東西分散在不同方向，彼此沒有連結，很難疊加成一項別人認得出來的資產。"],["一個人走，容易中斷","工作一忙，計畫就停下來；沒有人一起校準，也容易開始懷疑自己。"],["有想法，但沒有檢查點","知道要改變，卻不知道三個月後該看到什麼，所以很難判斷自己有沒有在前進。"]],
+  ibm:true,
+  qs:["你學過、做過的那些能力，換一個任務、換一群人，還派得上用場嗎？你怎麼知道？","如果再過一年，你花在學習上的時間和金錢，還是沒有換來一個看得見的實質成果，你還要用同樣的方式，再學一年嗎？","如果要你把工作上最常派上用場的能力，濃縮成一套能幫別人解決問題的方法，那會是什麼？你會替它取什麼名字？"],riskFix:[["缺乏能力轉移的能力","你學了很多、也做了很多，但這些能力大多只在原本的情境裡發揮。換一個任務、換一群人，就得重新證明自己一次。"],["學習停在「知道」","沒有在真實場合試過的能力，很難變成別人看得見的成果，也很難讓你自己確定它真的有用。"]],oppFix:[["播種到其他場域","在跨部門專案、新的任務，或工作以外的小場合，做低成本、小規模的測試，看看哪些能力換了情境依然成立。"],["整理成自己的工具與方法論","把試過有效的做法寫下來，變成可以重複使用、也能教會別人的方法。這就是能力開始變成資產的時刻。"]],opp:"你已經在行動。只要找到一條主軸，過去分散的學習，就會開始互相加乘。",
+  offers:[
+   {pick:1,t:"資產升級共學群（先免費一對一入群對談）",d:"加入前，Ginger 會先和你一對一聊聊，了解你目前的轉型階段，確認共學群適不適合你。通過後，和一群同樣在轉型的人一起讀書、實作、互相校準。",fit:["你已經開始行動，但一個人容易中斷或懷疑自己","你需要一群同頻的夥伴，持續互相提醒","你願意定期投入時間，而不只是旁聽"],url:go(CONFIG.groupUrl),cta:"預約免費入群對談"},
+   {t:"《把資歷變資產》或一日工作坊",price:"工作坊：一般方案 NT$8,800（含新書）｜讀者方案 NT$6,800",d:"想按自己的步調來，可以先讀書：每一章都附有實作練習，從第 3 章的職涯資產負債表開始盤點。想在短時間內整理出一套行動計畫，可以直接參加工作坊：1/16（六）09:00–17:00，台北捷運站附近，實體小班，一天之內完成職涯資產負債表、人生價值宣言，以及 S.C.A.N. 90 天行動計畫，課後還有一對一面談。",fit:["你想把零散的想法，整理成有主軸的計畫","你曾經訂過計畫卻停滯了，想找回方向和節奏","你習慣自己讀書消化（選新書），或偏好現場練習（選工作坊）"],url:go(CONFIG.bookUrl),cta:"了解這本書",url2:CONFIG.workshopUrl,cta2:"查看工作坊"},
+   {t:"一對一資產梳理對談（45 分鐘）",price:"NT$1,200<s>原價 NT$3,600</s>",d:"Ginger 會根據你目前的轉型方向，陪你梳理已經在累積的資產，找出最值得深化的主軸，讓你知道下一季該把力氣放在哪裡。之後報名工作坊或陪跑，對談費用可全額折抵。",fit:["你學了很多，卻說不清自己最值錢的是什麼","你想針對自己的情況，得到具體、個人化的建議","你想省下自己摸索的時間，直接找到主軸"],url:go(CONFIG.oneOnOneUrl),cta:"預約一對一對談"}],
+  letter:"<p>轉型最難的，不是資源，而是不知從何下手。</p><p>你需要的不是從零開始，而是從你既有的資源和能力出發。</p><p>你已經走在路上了。接下來需要的，是一個能讓你把資歷變資產的實戰場域：驗證自己的資歷，再轉化成專屬於你的方法論。</p>"},
+ 3:{tag:"偏資產型",title:"你已經在累積，下一步是放大",
+  means:`<p>在 7 個面向裡，你有比較多的答案落在「資產型」這一邊。通常這代表：</p><ul class="bul"><li>你有清楚的核心能力，也常被交付重要的任務</li><li>遇到問題，你會主動復盤，把經驗整理下來</li><li>你看事情的角度，已經很接近經營者</li></ul><p>你需要的不是被說服，而是讓價值被更多人看見，並且能持續運作。</p>`,
+  plus:[["清楚的核心能力","你知道自己擅長什麼，別人也知道遇到什麼問題該找你。"],["復盤的習慣","你會把每一次經驗變成下一次的方法，這是資產能持續增值的關鍵。"],["累積起來的信用","別人願意把重要的事交給你，這份信任本身就是你最重要的資產之一。"]],
+  stuck:[["什麼都自己扛","能力愈強，愈容易把所有事都攬在身上，最後時間被綁住，價值也停在原地。"],["價值只在你在場時發揮","你在，事情就順；你不在，事情就停。真正的不可取代，是你不在場時，你的方法依然在運作。"],["機會很多，不知道先做哪個","選擇變多之後，最難的反而是排出優先順序。"]],
+  ibm:false,
+  qs:["如果要你把自己最有價值的能力，寫成一份說明書交給別人，你會寫下哪些內容？寫的時候，哪些部分你發現很難說清楚？","每個人每天的時間都是公平的 24 小時，但精力跟體力，只會隨著年齡減退。你曾經試過哪些投入一次，就可以持續為你產生價值的變現方式？","如果明天要你開闢一個新的戰場，你會用什麼方式借力使力，讓自己不必事事親自在場，也能用最快的速度達到預期的目標？"],opp:"你已經有清楚的核心能力。接下來的關鍵，是讓它不只靠你一個人撐著。",
+  offers:[
+   {pick:1,t:"資產升級共學群（先免費一對一入群對談）",d:"放大階段最需要的，是一群能互相校準、彼此激盪的人。加入前，Ginger 會先和你一對一聊聊，確認共學群適不適合你現在的階段。",fit:["你想長期待在一個會推著你往前的環境裡","你樂於分享自己的經驗，也想從別人的實戰中學習","你希望身邊有一群同樣在累積資產的人"],url:go(CONFIG.groupUrl),cta:"預約免費入群對談"},
+   {t:"「把資歷變資產」一日工作坊",price:"一般方案 NT$8,800（含新書）｜讀者方案 NT$6,800",d:"1/16（六）09:00–17:00，台北捷運站附近，實體小班。把你的能力命名、定位，並設計放大的方式；帶著 S.C.A.N. 90 天行動計畫回去，課後還有一對一面談。",fit:["你想用一整天，系統化地重新檢視自己的資產配置","你希望在一群同樣認真的人之中，互相激盪"],url:CONFIG.workshopUrl,cta:"查看工作坊"},
+   {t:"一對一資產梳理對談（45 分鐘）",price:"NT$1,200<s>原價 NT$3,600</s>",d:"你已經有核心能力，需要的是一條適合你的放大路徑。Ginger 會先和你梳理手上的資產，再一起評估：是把專業知識整理成可以變現的服務，還是先在真實的商業場域累積實戰經驗。之後報名工作坊或陪跑，對談費用可全額折抵。",fit:["你有明確的專業，但不確定怎麼讓它發揮更大的價值","你同時有好幾個想法，需要有人幫你排出優先順序","你想針對自己的情況得到具體建議，而不是通用的方法"],url:go(CONFIG.oneOnOneUrl),cta:"預約一對一對談"}],
+  letter:"<p>能力很強的人，很會解決別人的問題，但常常忘了自己也需要被梳理。有些東西需要斷捨離，有些需要被強化賦能，才能讓自己有持續往下走的能力與精力。</p><p>你已經走到很多人想去的地方。下一步，是讓你的價值不再只靠你一個人撐著，而是能被看見、被延續。</p>"}
+};
+
+/* ---- state ---- */
+try{ document.querySelectorAll('#lead .note').forEach(e=>{}); }catch(e){}
+const score = () => ans.reduce((s,a)=>s+(a??0)+1,0);
+const typeOf = s => s<=11 ? 1 : s<=16 ? 2 : 3;
+const order = QS.map(()=>[0,1,2].sort(()=>Math.random()-.5));
+const ans = Array(QS.length).fill(null);
+let i = 0;
+const $ = id => document.getElementById(id);
+const show = id => {document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo({top:0,behavior:'smooth'});};
+const LABEL = {1:"偏資歷型人才",2:"轉型中的人才",3:"偏資產型人才"};
+
+/* 7 個面向：依答案（0 資歷、1 轉型、2 資產）顯示的說明 */
+const DIM = [
+  {n:"角色定位",t:["用時間與勞力換取薪水","開始重視學習與成長","帶著合作夥伴與創業家精神做事"],
+   r:"如果只把工作看成要完成的任務，或是學習的機會，你的價值可能會隨著任務結束而結束。",
+   o:"你習慣從「我能多創造什麼」出發。這種合作夥伴與創業家精神的視角，正是 AI 時代最稀缺的能力。因為無論是老闆，還是優質的合作夥伴，最想交付重要任務、最想合作的對象，都是這樣的人。"},
+  {n:"價值目標",t:["在意短期的薪資與獎金","在意新技能與新經驗","把資歷轉為可持續增值的資產"],
+   r:"目標停在薪資、獎金，或只是累積新經驗時，每一年的努力很容易在這一年就結算完，留不到明年。",
+   o:"你在意的是能重複使用的成果。這代表你的每一次投入，都有機會成為下一次的起點。"},
+  {n:"能力方向",t:["工作缺什麼，就補什麼","跟著趨勢學新東西","聚焦有溢價的核心專長"],
+   r:"缺什麼補什麼、流行什麼學什麼，容易學得很多卻很分散，難以疊加成一項別人認得出來的專長。",
+   o:"你知道自己的核心專長在哪裡。接下來的每一次學習，都能替它加值，而不是從頭開始。"},
+  {n:"專業定位",t:["用公司和職稱介紹自己","用技能清單介紹自己","別人遇到問題，會第一個想到你"],
+   r:"用公司、職稱或技能清單介紹自己時，別人記住的是你的位置和工具，而不是你能解決的問題。",
+   o:"別人遇到問題會先想到你，代表你已經有清楚的辨識度。這是最難建立、也最值得放大的資產。"},
+  {n:"面對變動",t:["容易先擔心自己的位置","先觀察，等情況明朗","主動配置能力，提前準備"],
+   r:"變動來時先擔心或先觀望，代表你還在等環境決定你的位置。變動愈頻繁，這份被動就愈常出現。",
+   o:"你把變動看成承擔更多的機會。組織調整的時候，這樣的人往往最先被看見。"},
+  {n:"經驗累積",t:["做的事差不多，只是更熟練","有新經驗，但說不出累積了什麼","價值持續堆疊，別人也看得見"],
+   r:"年資增加，卻說不清楚自己多了什麼時，經驗只是讓你更熟練，價值不一定跟著成長。",
+   o:"你說得出自己多了哪些能力，別人也看得見。你的經驗已經開始堆疊，可以進一步整理成方法。"},
+  {n:"面對問題",t:["先釐清是哪個環節、誰負責","處理完就接著做下一件","復盤原因，整理成下次的方法"],
+   r:"問題停在釐清責任，或處理完就往下走，經驗不會留下來。同樣的問題，下次還要重新花一次力氣。",
+   o:"你會把問題整理成下次的方法。這個復盤的習慣，正是經驗能變成資產的關鍵。"}
+];
+
+function renderQ(){
+  const q = QS[i];
+  $('bar').style.width = (i/QS.length*100)+'%';
+  $('num').textContent = `第 ${i+1} 題，共 ${QS.length} 題`;
+  $('back').style.visibility = i ? 'visible' : 'hidden';
+  $('qtext').textContent = q.q;
+  $('opts').innerHTML = order[i].map(k=>`<button type="button" class="opt${ans[i]===k?' sel':''}" data-k="${k}">${q.o[k]}</button>`).join('');
+}
+$('opts').addEventListener('click', e=>{
+  const b = e.target.closest('.opt'); if(!b) return;
+  ans[i] = +b.dataset.k; b.classList.add('sel');
+  setTimeout(()=>{ if(i < QS.length-1){ i++; renderQ(); } else { $('bar').style.width='100%'; $('ltitle').innerHTML = `你是<span style="color:var(--gold2)">${LABEL[typeOf(score())]}</span>`; show('lead'); } }, 220);
+});
+$('back').addEventListener('click', ()=>{ if(i>0){ i--; renderQ(); } });
+$('start').addEventListener('click', ()=>{ i=0; renderQ(); show('quiz'); });
+
+const code = () => ans.map(a=>a+1).join('');
+
+function sendKit(name,email,role,t,s){
+  return new Promise(done=>{
+  const fid = CONFIG.kitForms[t];
+  if(!fid){ done(); return; }
+  const sink = document.querySelector('iframe[name=kit_sink]');
+  let fin=false; const end=()=>{ if(!fin){ fin=true; done(); } };
+  if(sink) sink.addEventListener('load', end, {once:true});
+  setTimeout(end, 3000);
+  try{
+    const f = document.createElement('form');
+    f.method='POST'; f.action=`https://app.kit.com/forms/${fid}/subscriptions`; f.target='kit_sink'; f.style.display='none';
+    const add=(k,v)=>{const x=document.createElement('input');x.type='hidden';x.name=k;x.value=v;f.appendChild(x);};
+    add('email_address',email); add('first_name',name);
+    add('fields[role]',role); add('fields[result]',R[t].tag); add('fields[score]',String(s)); add('fields[answers]',code());
+    document.body.appendChild(f); f.submit(); setTimeout(()=>f.remove(),3000);
+  }catch(e){ end(); }
+  });
+}
+
+const ICON_H = `<svg viewBox="0 0 28 28" aria-hidden="true"><path d="M7 4h14M7 24h14M9 4c0 7 5 8 5 10c0 2-5 3-5 10M19 4c0 7-5 8-5 10c0 2 5 3 5 10" fill="none" stroke="#7d7a74" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+const ICON_D = `<svg viewBox="0 0 28 28" aria-hidden="true"><path d="M8 6h12l5 6-11 12L3 12z" fill="#c9a45c"/><path d="M3 12h22M8 6l6 18 6-18" fill="none" stroke="#0c0b09" stroke-opacity=".35" stroke-width="1"/></svg>`;
+
+function noOrphan(root){
+  root.querySelectorAll('p, .bul li, .ex li div, .list li span').forEach(el=>{
+    if(el.querySelector('.nw:last-child')) return;
+    const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT); let last=null,n;
+    while((n=w.nextNode())) if(n.nodeValue.trim()) last=n;
+    if(!last || last.parentNode.classList?.contains('nw')) return;
+    const v=last.nodeValue.replace(/\s+$/,''); if(v.length<8) return;
+    const cut=v.length-5, sp=document.createElement('span'); sp.className='nw'; sp.textContent=v.slice(cut);
+    last.nodeValue=v.slice(0,cut); last.parentNode.insertBefore(sp,last.nextSibling);
+  });
+}
+function renderReport(name,t,s){
+  const r = R[t];
+  const pos = (s-7)/14*100;
+  const zone = ['偏資歷型','轉型中','偏資產型'];
+  const items = a => `<ul class="list">${a.map(x=>`<li><b>${x[0]}</b><span>${x[1]}</span></li>`).join('')}</ul>`;
+  const mx = Math.max(...ans), mn = Math.min(...ans);
+  const top = DIM.filter((d,k)=>ans[k]===mx).map(d=>d.n).slice(0,2).join('、');
+  const low = DIM.filter((d,k)=>ans[k]===mn).map(d=>d.n).slice(0,2).join('、');
+  const rk = DIM.map((d,k)=>[d,ans[k]]).filter(([d,v])=>v===mn && v<2).slice(0,2);
+  const op = DIM.map((d,k)=>[d,ans[k]]).filter(([d,v])=>v===mx && v===2).slice(0,2);
+  const fixL = a => `<ul class="list">${a.map(x=>`<li><b>${x[0]}</b><span>${x[1]}</span></li>`).join('')}</ul>`;
+  const risk = r.riskFix ? fixL(r.riskFix) : rk.length ? `<ul class="list">${rk.map(([d])=>`<li><b>${d.n}</b><span>${d.r}</span></li>`).join('')}</ul>` : items(r.stuck);
+  const opp = r.oppFix ? fixL(r.oppFix) : op.length ? `<ul class="list">${op.map(([d])=>`<li><b>${d.n}</b><span>${d.o}</span></li>`).join('')}</ul>` : `<p>${r.opp}</p>`;
+  const hl = mx===mn ? '' : `<div class="hl"><div><small>你最接近資產型的面向</small><strong>${top}</strong></div><div><small>最值得先調整的面向</small><strong>${low}</strong></div></div>`;
+  const dims = `<div class="seglbl"><b></b><span>${zone.map(z=>`<em>${z}</em>`).join('')}</span></div><div class="dims">${DIM.map((d,k)=>`<div class="dim"><b>${d.n}</b><div class="seg">${[0,1,2].map(v=>`<i class="${v===ans[k]?'on'+(v+1):''}"></i>`).join('')}</div><p>${d.t[ans[k]]}</p></div>`).join('')}</div>${hl}`;
+  $('report').innerHTML = `
+  <div class="rhead"><p class="rtag">${name?name+'，':''}你的資歷累積類型分析報告｜${r.tag}</p><h1>${r.title.split('，').map((p,k,a)=>`<span class="nw">${p}${k<a.length-1?'，':''}</span>`).join('')}</h1></div>
+  <div class="gauge" aria-label="你的位置：${r.tag}"><div class="gends">${ICON_H}${ICON_D}</div><div class="track"><span class="dot" id="dot" style="left:0%"></span></div>
+  <div class="zones">${zone.map((z,k)=>`<span class="${k+1===t?'me':''}">${z}</span>`).join('')}</div></div>
+  <p class="note">這不是在幫你打分數，也不是評估你的能力或價值。這份報告反映的是你「現在」累積經驗的模式，它會隨著你的選擇改變，三個月後再測一次，結果可能就不一樣。</p>
+  <div class="sec"><h2>你在 7 個面向的位置</h2>${dims}</div>
+  <div class="sec"><h2>這個結果代表什麼</h2>${r.means}</div>
+  <div class="sec"><h2>你已經擁有的優勢</h2>${items(r.plus)}</div>
+  <div class="sec"><h2>潛在風險</h2>${risk}</div>
+  <div class="sec"><h2>機會點</h2>${opp}</div>
+  ${r.ibm?IBM:''}
+  <div class="sec"><h2>留給你的${["","一","兩","三","四","五"][r.qs.length]}個問題</h2><p>這幾題沒有標準答案，也不用急著一次回答完。找一個安靜的時間，把答案寫下來。</p><ol class="ex">${r.qs.map(x=>`<li><div>${x}</div></li>`).join('')}</ol><p>接下來幾天，我會在信裡陪你，一題一題往下想。</p></div>
+  <div class="letter"><h3>寫給你</h3><div style="margin-top:12px">${r.letter}</div><p class="sign"><b>Ginger Lin 林逸蓁</b>《把資歷變資產》作者</p></div>
+  <div class="tools"><button class="btn line" id="pdf" type="button">存成 PDF</button><button class="btn line" id="again" type="button">重新檢查一次</button></div>
+  <div class="foot"><span>本報告為自我覺察工具，結果僅供參考，不代表專業職涯評估。</span></div>`;
+  noOrphan($('report'));
+  show('report');
+  try{ history.replaceState(null,'','#r'+code()); }catch(e){}
+  requestAnimationFrame(()=>setTimeout(()=>{ const d=$('dot'); if(d) d.style.left = Math.max(3,Math.min(97,pos))+'%'; },120));
+  $('again').addEventListener('click', ()=>{ if(CONFIG.mode!=='inline'){ location.href=CONFIG.checkUrl; return; } ans.fill(null); i=0; try{ history.replaceState(null,'',location.pathname); }catch(e){} renderQ(); show('quiz'); });
+  $('pdf').addEventListener('click', ()=>{ try{ window.print(); }catch(e){} });
+}
+
+$('form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const name = $('name').value.trim(), email = $('email').value.trim();
+  const role = (document.querySelector('input[name=role]:checked')||{}).value || '一般工作者';
+  if(!name){ $('err').textContent='請留下你的稱呼。'; $('name').focus(); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ $('err').textContent='請確認 Email 格式是否正確。'; $('email').focus(); return; }
+  $('err').textContent='';
+  const s = score(), t = typeOf(s);
+  if(CONFIG.mode==='check'){
+    const btn = $('form').querySelector('button[type=submit]'); btn.disabled = true; btn.textContent = '正在產生你的報告…';
+    sendKit(name,email,role,t,s).then(()=>{ location.href = CONFIG.reportUrl + '#r' + code(); });
+    return;
+  }
+  sendKit(name,email,role,t,s);
+  renderReport(name,t,s);
+});
+
+/* 專屬網址：#r 加 7 碼答案（例如 #r1232312），直接打開完整報告 */
+const m = /^#r([123]{7})$/.exec(location.hash);
+if(m){ m[1].split('').forEach((c,k)=>ans[k]=+c-1); const s=score(); renderReport('',typeOf(s),s); }
+else if(CONFIG.mode==='report'){
+  $('report').innerHTML = `<h1>你的資歷，<br>正在變成資產嗎？</h1><p class="lead">這裡是「資歷累積類型分析報告」的查看頁面。完成 7 題檢查之後，你的專屬報告會出現在這裡。</p><a class="btn" href="${CONFIG.checkUrl}">開始回答</a>`;
+  show('report');
+}
+
+}
+</script>
+</body>
+</html>
