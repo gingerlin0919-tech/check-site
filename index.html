@@ -305,6 +305,13 @@ function sendKit(name,email,role,t,s){
   let fin=false; const end=()=>{ if(!fin){ fin=true; done(); } };
   if(sink) sink.addEventListener('load', end, {once:true});
   setTimeout(end, 3000);
+  const fd = new FormData();
+  fd.append('email_address',email); fd.append('first_name',name);
+  fd.append('fields[role]',role); fd.append('fields[result]',R[t].tag); fd.append('fields[score]',String(s)); fd.append('fields[answers]',code());
+  fetch(`https://app.kit.com/forms/${fid}/subscriptions`,{method:'POST',body:fd,headers:{Accept:'application/json'},keepalive:true})
+    .then(r=>{ if(!r.ok) throw 0; fin=true; done(); })
+    .catch(()=>legacy());
+  function legacy(){
   try{
     const f = document.createElement('form');
     f.method='POST'; f.action=`https://app.kit.com/forms/${fid}/subscriptions`; f.target='kit_sink'; f.style.display='none';
@@ -313,6 +320,7 @@ function sendKit(name,email,role,t,s){
     add('fields[role]',role); add('fields[result]',R[t].tag); add('fields[score]',String(s)); add('fields[answers]',code());
     document.body.appendChild(f); f.submit(); setTimeout(()=>f.remove(),3000);
   }catch(e){ end(); }
+  }
   });
 }
 
